@@ -23,7 +23,7 @@
     .topbar{
       background:#15171b;border-bottom:1px solid var(--line);
       padding:12px 18px;text-align:center;font-weight:700;
-      font-size:18px;color:var(--accent);
+      font-size:20px;color:var(--accent);
       box-shadow:0 4px 20px rgba(0,0,0,.3);
       position:sticky;top:0;z-index:1000;
     }
@@ -50,7 +50,7 @@
   </style>
 </head>
 <body>
-  <div class="topbar" id="topdate">📅 آخر تحديث: جاري التحميل...</div>
+  <div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
 
   <div class="wrap">
     <header>
@@ -66,35 +66,27 @@
   </div>
 
   <script>
-  // تحميل النص وتحويله لتصميم منسق
   fetch("daily.txt?" + Date.now())
-    .then(res => {
-      const mod = res.headers.get("Last-Modified");
-      if(mod){
-        const d = new Date(mod);
-        const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,"0"), day = String(d.getDate()).padStart(2,"0");
-        document.getElementById("topdate").textContent = `📅 آخر تحديث: ${y}-${m}-${day}`;
-      }
-      return res.text();
-    })
-    .then(text => {
+    .then(r=>r.text())
+    .then(text=>{
       const lines = text.trim().split(/\r?\n/);
+      const firstLine = lines[0]; // أول سطر = التاريخ
+      document.getElementById("topdate").innerHTML = `📅 <b>آخر تحديث:</b> ${firstLine}`;
+      lines.shift(); // حذف التاريخ من المحتوى
       let html = "";
       let currentSection = "";
       lines.forEach(line=>{
         if(!line.trim()) return;
         if(!line.match(/^0|^\$/)){ // عنوان قسم
-          if(currentSection){
-            html += `</ul></div>`;
-          }
+          if(currentSection){ html += `</ul></div>`; }
           currentSection = line.trim();
           html += `<div class="card"><h2>${currentSection}</h2><ul>`;
-        } else { // عنصر تحدي
+        } else {
           html += `<li>${line}</li>`;
         }
       });
       if(currentSection) html += "</ul></div>";
-      document.getElementById("challenges").innerHTML = html || "❌ لم يتم العثور على تحديات.";
+      document.getElementById("challenges").innerHTML = html;
     })
     .catch(()=>{document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";});
   </script>
