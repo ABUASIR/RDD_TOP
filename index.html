@@ -3,160 +3,100 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>تحديات Red Dead Online اليومية — 2025-10-21</title>
+  <title>🎯 تحديات Red Dead Online اليومية</title>
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#0e0f12; --card:#15171b; --muted:#9aa3b2; --text:#e9edf3; --accent:#22d3ee; --line:#2a2f39;
+      --bg:#0e0f12; --card:#15171b; --muted:#9aa3b2;
+      --text:#e9edf3; --accent:#22d3ee; --line:#2a2f39;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
-      background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) no-repeat fixed;
+      background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) fixed;
       color:var(--text);
-      font-family:"Tajawal", system-ui, -apple-system, Segoe UI, Tahoma;
+      font-family:"Tajawal",sans-serif;
       line-height:1.7;
-      display:block;
-      padding:20px 16px 80px;
+      padding:0 16px 80px;
     }
-    .wrap{width:min(980px,100%); margin:auto;}
+    .wrap{max-width:980px;margin:auto;}
+    .topbar{
+      background:#15171b;border-bottom:1px solid var(--line);
+      padding:12px 18px;text-align:center;font-weight:700;
+      font-size:18px;color:var(--accent);
+      box-shadow:0 4px 20px rgba(0,0,0,.3);
+      position:sticky;top:0;z-index:1000;
+    }
     header{
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
       border:1px solid var(--line);
       border-radius:20px;
-      padding:20px 22px;
-      margin-bottom:18px;
-      box-shadow:0 8px 24px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.04);
+      padding:20px;margin-top:20px;margin-bottom:18px;
+      box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04);
+      text-align:center;
     }
-    .title{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
-    .title h1{margin:0; font-weight:800; font-size: clamp(20px, 4vw, 28px); letter-spacing:.2px}
-    .date{margin-inline-start:auto; font-weight:700; color:var(--accent);}
-    .sep{margin:14px 0 4px; color:var(--muted); font-size:14px}
-    .sep::after{content:""; display:block; height:1px; background:linear-gradient(90deg, transparent, var(--line), transparent); margin-top:10px}
-    .grid{display:grid; grid-template-columns:repeat(12, 1fr); gap:14px;}
-    .card{
-      grid-column: span 12;
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:18px;
-      padding:16px 16px 6px;
-      box-shadow:0 10px 30px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.03);
-    }
-    @media (min-width:860px){ .card{grid-column: span 6} }
-    .card h2{margin:0 0 10px; font-size:18px; display:flex; align-items:center; gap:8px}
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:6px;
-      font-weight:700;
-      padding:6px 10px;
-      border-radius:999px;
-      font-size:13px;
-      background:#101217;
-      border:1px solid var(--line);
-      color:var(--text)
-    }
-    .badge i{font-style:normal; color:var(--accent)}
-    .list{margin:6px 0 6px; padding:0; list-style:none}
-    .item{position:relative; padding:10px 12px 10px 10px; border-top:1px dashed var(--line); font-size:15px}
-    .item:first-child{border-top:none}
-    .dot{font-size:16px; margin-inline-end:8px; opacity:.9}
-    .count{font-weight:700; color:#9ee8f7; margin-inline-start:6px}
-    .muted{color:var(--muted)}
-    footer{margin-top:24px; text-align:center; color:var(--muted); font-size:13px}
-    .long-sep{margin:10px 0 2px; text-align:center; letter-spacing:2px; opacity:.75}
+    h1{margin:0;font-weight:800;font-size:26px}
+    .card{background:var(--card);border:1px solid var(--line);
+      border-radius:18px;padding:16px;margin-top:14px}
+    h2{margin-top:0;color:var(--accent);font-size:18px}
+    ul{margin:0;padding:0;list-style:none}
+    li{border-top:1px dashed var(--line);padding:8px 4px}
+    li:first-child{border-top:none}
+    footer{text-align:center;margin-top:24px;color:var(--muted);font-size:13px}
     .join-btn{
-      display:inline-block;
-      background:var(--accent);
-      color:#000;
-      text-decoration:none;
-      font-weight:700;
-      padding:10px 20px;
-      border-radius:12px;
-      margin-top:10px;
-      transition:background .25s;
+      display:inline-block;background:var(--accent);color:#000;text-decoration:none;
+      font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
     }
-    .join-btn:hover{background:#4de4ff;}
   </style>
 </head>
 <body>
+  <div class="topbar" id="topdate">📅 آخر تحديث: جاري التحميل...</div>
+
   <div class="wrap">
     <header>
-      <div class="title">
-        <h1>🎯 التحديات اليومية</h1>
-        <div class="date">2025-10-21</div>
-      </div>
+      <h1>🎯 التحديات اليومية</h1>
     </header>
 
-    <section class="grid">
-      <article class="card">
-        <h2><span class="badge"><i>General</i> — التحديات العامة</span></h2>
-        <ul class="list">
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> اسلخ طير <b>Prairie Chicken</b></li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> اسلخ راكون <b>Raccoon</b></li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> نظف سلاحك</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/1</span> اعثر أو افتح خريطة كنز</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/5</span> اقطف فطر <b>Parasol Mushroom</b></li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> اقتل لاعب بسلاح يومى في <b>Showdowns</b></li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/5280</span> قد القطار للمسافة المطلوبة</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2><span class="badge"><i>Bounty Hunter</i> — باونتي هنتر</span></h2>
-        <ul class="list">
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> انهب مطلوب</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> استخدم <b>Eagle Eye</b> لتتبع المطلوب</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> اطلق سهم التتبع على المطلوب <b>Tracking Arrow</b></li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2><span class="badge"><i>Trader</i> — التاجر</span></h2>
-        <ul class="list">
-          <li class="item"><span class="dot">▪️</span><span class="count">$200.00/0</span> اجمع المبلغ من البيع</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/7</span> تبرع بجثث حيوانات متوسطة</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> تبرع بجلد أو جثة حيوان مفترس</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2><span class="badge"><i>Moonshiner</i> — المونشاين</span></h2>
-        <ul class="list">
-          <li class="item"><span class="dot">▪️</span><span class="count">0/1</span> غير ديكور بار المونشاين</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> ارقص مع الفرقة لمدة دقيقتان</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> أكمل مهام قصة المونشاين</li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2><span class="badge"><i>Naturalist</i> — عالم الطبيعة</span></h2>
-        <ul class="list">
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> أنعش حیوان مخدر</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> اشرب <b>Hardy Tonic</b> خلال الجو الحار أو البارد</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/2</span> استخدم <b>pheromone</b> للعثور على حيوان <b>Legendary</b></li>
-        </ul>
-      </article>
-
-      <article class="card">
-        <h2><span class="badge"><i>Collector</i> — الكولكتر</span></h2>
-        <ul class="list">
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> اجمع كولكتر من جثث البوتات</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> اجمع كولكتر بالمجرف</li>
-          <li class="item"><span class="dot">▪️</span><span class="count">0/3</span> اجمع زهور <b>American Wild Flowers</b></li>
-        </ul>
-      </article>
-    </section>
+    <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
     <footer>
       <p><b>جميع الحقوق محفوظة لقروب RDD_TOP@ تيليجرام</b></p>
       <a class="join-btn" href="https://t.me/RDD_TOP" target="_blank">🔗 انضم إلى القروب</a>
     </footer>
   </div>
+
+  <script>
+  // تحميل النص وتحويله لتصميم منسق
+  fetch("daily.txt?" + Date.now())
+    .then(res => {
+      const mod = res.headers.get("Last-Modified");
+      if(mod){
+        const d = new Date(mod);
+        const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,"0"), day = String(d.getDate()).padStart(2,"0");
+        document.getElementById("topdate").textContent = `📅 آخر تحديث: ${y}-${m}-${day}`;
+      }
+      return res.text();
+    })
+    .then(text => {
+      const lines = text.trim().split(/\r?\n/);
+      let html = "";
+      let currentSection = "";
+      lines.forEach(line=>{
+        if(!line.trim()) return;
+        if(!line.match(/^0|^\$/)){ // عنوان قسم
+          if(currentSection){
+            html += `</ul></div>`;
+          }
+          currentSection = line.trim();
+          html += `<div class="card"><h2>${currentSection}</h2><ul>`;
+        } else { // عنصر تحدي
+          html += `<li>${line}</li>`;
+        }
+      });
+      if(currentSection) html += "</ul></div>";
+      document.getElementById("challenges").innerHTML = html || "❌ لم يتم العثور على تحديات.";
+    })
+    .catch(()=>{document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";});
+  </script>
 </body>
 </html>
-<!-- refresh -->
-
-
-
