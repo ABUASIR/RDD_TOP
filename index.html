@@ -71,7 +71,7 @@
     .then(text=>{
       const lines = text.trim().split(/\r?\n/);
       const firstLine = lines[0]; // أول سطر = التاريخ
-      document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث</b> ${firstLine}`;
+      document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث:</b> ${firstLine}`;
       lines.shift(); // حذف التاريخ من المحتوى
       let html = "";
       let currentSection = "";
@@ -92,5 +92,6 @@
   </script>
 </body>
 </html>
+
 
 
