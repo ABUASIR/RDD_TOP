@@ -11,7 +11,6 @@
       --text:#e9edf3; --accent:#22d3ee; --line:#2a2f39;
     }
     *{box-sizing:border-box}
-    html,body{height:100%}
     body{
       margin:0;
       background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) fixed;
@@ -19,10 +18,6 @@
       font-family:"Tajawal",sans-serif;
       line-height:1.7;
       padding:0 16px 80px;
-      -webkit-user-select:none; /* تعطيل التحديد في CSS */
-      -moz-user-select:none;
-      -ms-user-select:none;
-      user-select:none;
     }
     .wrap{max-width:980px;margin:auto;}
     .topbar{
@@ -52,16 +47,6 @@
       display:inline-block;background:var(--accent);color:#000;text-decoration:none;
       font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
     }
-
-    /* تحذير مرئي عند محاولة حفظ الصفحة */
-    #protectToast{
-      position:fixed;left:50%;transform:translateX(-50%);bottom:18px;
-      background:#111;padding:10px 14px;border-radius:12px;color:var(--text);
-      box-shadow:0 6px 20px rgba(0,0,0,.6);display:none;font-weight:700;
-    }
-    /* اجعل canvas يستجيب */
-    #canvasHolder{margin-top:14px;display:flex;justify-content:center;}
-    canvas{max-width:100%;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,.35);}
   </style>
 </head>
 <body>
@@ -72,10 +57,7 @@
       <h1>🎯 التحديات اليومية</h1>
     </header>
 
-    <div id="canvasHolder">
-      <!-- سيتم إنشاء canvas ديناميكيًا هنا -->
-      <div id="challenges">⏳ جاري تحميل التحديات...</div>
-    </div>
+    <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
     <footer>
       <p><b>جميع الحقوق محفوظة لقروب RDD_TOP@ 'برمجة العسيري'</b></p>
@@ -83,193 +65,36 @@
     </footer>
   </div>
 
-  <div id="protectToast">🔒 تم تعطيل نسخ المحتوى لحماية الحقوق</div>
-
   <script>
-  /******************************
-   الحماية: تعطيل النقر بالزر الأيمن، النسخ، تحديد النص، واختصارات المفاتيح
-  *******************************/
-  document.addEventListener('contextmenu', e => { e.preventDefault(); showToast(); });
-  document.addEventListener('selectstart', e => e.preventDefault());
-  document.addEventListener('copy', e => { e.preventDefault(); showToast(); });
-  document.addEventListener('cut', e => { e.preventDefault(); showToast(); });
-
-  document.addEventListener('keydown', function(e){
-    // منع F12, Ctrl+Shift+I, Ctrl+U, Ctrl+S, Ctrl+Shift+C
-    if (e.key === 'F12' ||
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'i') ||
-        (e.ctrlKey && e.key.toLowerCase() === 'u') ||
-        (e.ctrlKey && e.key.toLowerCase() === 's') ||
-        (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c')
-       ) {
-      e.preventDefault();
-      showToast();
-    }
-  });
-
-  let toastTimer = null;
-  function showToast(){
-    const t = document.getElementById('protectToast');
-    t.style.display = 'block';
-    if (toastTimer) clearTimeout(toastTimer);
-    toastTimer = setTimeout(()=> t.style.display='none', 1600);
-  }
-
-  /******************************
-   تحميل الملف النصي، ثم رسم المحتوى على Canvas
-  *******************************/
-  function wrapText(ctx, text, maxWidth, rtl){
-    // يُعيد مصفوفة الأسطر الملتفة
-    const words = text.split(' ');
-    const lines = [];
-    let line = '';
-    for (let n = 0; n < words.length; n++) {
-      const testLine = line ? (line + ' ' + words[n]) : words[n];
-      const metrics = ctx.measureText(testLine);
-      if (metrics.width > maxWidth && line) {
-        lines.push(line);
-        line = words[n];
-      } else {
-        line = testLine;
-      }
-    }
-    if (line) lines.push(line);
-    // لعربية R-L قد نحتاج لعكس ترتيب الكلمات في السطر لعرض أحسن عند المحاذاة 'right'
-    if (rtl) return lines.map(l => l.split(' ').reverse().join(' '));
-    return lines;
-  }
-
-  function renderToCanvas(lines, dateStr){
-    // إعدادات تصميمية
-    const padding = 22;
-    const sectionGap = 18;
-    const titleSize = 20;
-    const itemSize = 16;
-    const lineSpacing = 6;
-    const canvasMaxWidth = Math.min(980, window.innerWidth - 40);
-
-    // أنشئ عنصر canvas
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.min(1200, canvasMaxWidth * 2); // مضاعف لتحسين الدقة على شاشات عالية الكثافة
-    const ctx = canvas.getContext('2d');
-    // تعيين خطوط (ملاحظة: قد تحتاج المتصفح لتحميل خط Tajawal، نستخدم fallback إذا لم يُحمّل)
-    const scale = window.devicePixelRatio || 1;
-    ctx.scale(scale, scale);
-    const logicalWidth = canvas.width / scale;
-    // خط العنوان والقسم
-    ctx.font = `${titleSize}px Tajawal, system-ui, sans-serif`;
-    ctx.textAlign = 'right';
-    ctx.textBaseline = 'top';
-
-    // حساب ارتفاع ديناميكي
-    let y = padding;
-    // نكتب تاريخ التحديث أعلى الكانفس (موقع أعلى اليمين)
-    ctx.font = `bold ${itemSize}px Tajawal, system-ui, sans-serif`;
-    y += itemSize + 6;
-
-    // قم بحساب كل الأسطر لتحديد ارتفاع نهائي
-    let totalHeight = y;
-    const prepared = [];
-    lines.forEach(line => {
-      if (!line.trim()) return;
-      // اعتبار أن سطور العناوين لا تبدأ بـ "▪" أو بـ "0" أو "$"
-      if (!line.match(/^0|^\$|^▪|^-/)) {
-        // عنوان قسم: يمكن أن يلتف
-        ctx.font = `bold ${titleSize}px Tajawal, system-ui, sans-serif`;
-        const titleLines = wrapText(ctx, line.trim(), logicalWidth - padding*2, true);
-        prepared.push({type:'title', lines: titleLines});
-        totalHeight += titleLines.length * (titleSize + lineSpacing) + sectionGap;
-      } else {
-        // عنصر قائمة
-        ctx.font = `${itemSize}px Tajawal, system-ui, sans-serif`;
-        const itemText = line.replace(/^0|^\$|^▪|^-/, '').trim();
-        const itemLines = wrapText(ctx, '▪️ ' + itemText, logicalWidth - padding*2, true);
-        prepared.push({type:'item', lines: itemLines});
-        totalHeight += itemLines.length * (itemSize + lineSpacing);
-      }
-    });
-
-    // اضبط ارتفاع الكانفس مع الهامش
-    canvas.height = Math.max(200, (totalHeight + padding*1.5) * scale);
-    // إعادة مقياس السياق بعد تغيير الارتفاع
-    ctx.setTransform(scale,0,0,scale,0,0);
-    // خلفية واطار
-    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#0e0f12';
-    ctx.fillRect(0,0,canvas.width/scale,canvas.height/scale);
-    // ظل/إطار
-    // الآن ابدأ الرسم من الأعلى
-    y = padding;
-    // اكتب التاريخ أعلى الكانفس (يمين)
-    ctx.fillStyle = '#22d3ee';
-    ctx.font = `700 ${itemSize}px Tajawal, system-ui, sans-serif`;
-    ctx.textAlign = 'right';
-    ctx.fillText('تاريخ التحديث: ' + dateStr, logicalWidth - padding, y);
-    y += itemSize + 12;
-
-    // رسم كل الأقسام والعناصر
-    prepared.forEach(chunk => {
-      if (chunk.type === 'title') {
-        ctx.fillStyle = '#15171b'; // خلفية بطانة صغيرة
-        // رسم عنوان القسم بخط أكبر
-        ctx.font = `700 ${titleSize}px Tajawal, system-ui, sans-serif`;
-        chunk.lines.forEach(ln=>{
-          ctx.fillStyle = '#22d3ee';
-          ctx.fillText(ln, logicalWidth - padding, y);
-          y += titleSize + lineSpacing;
-        });
-        y += 6; // فراغ بعد العنوان
-      } else { // item
-        ctx.font = `${itemSize}px Tajawal, system-ui, sans-serif`;
-        ctx.fillStyle = '#e9edf3';
-        chunk.lines.forEach(ln=>{
-          ctx.fillText(ln, logicalWidth - padding, y);
-          y += itemSize + lineSpacing;
-        });
-      }
-      // فراغ بعد القسم/البند
-      y += 6;
-    });
-
-    // ضبط عرض العرض الفعلي للكانفس (CSS)
-    canvas.style.width = Math.min(980, window.innerWidth - 40) + 'px';
-    canvas.style.height = ((canvas.height/scale)) + 'px';
-    // استبدال العنصر
-    const holder = document.getElementById('canvasHolder');
-    holder.innerHTML = '';
-    holder.appendChild(canvas);
-  }
-
-  // تحميل الملف النصي والتحضير
   fetch("font-size.txt?" + Date.now())
-    .then(r => {
-      // إذا لم يكن 200، نعرض الخطأ (أحيانًا GitHub Pages يعيد HTML لصفحة 404)
-      if (!r.ok) throw new Error('fetch failed: ' + r.status);
-      return r.text();
-    })
+    .then(r=>r.text())
     .then(text=>{
-      // إزالة BOM إن وجد
-      if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
-      const lines = text.split(/\r?\n/);
-      const firstLine = (lines[0] || '').trim() || '—';
+      const lines = text.trim().split(/\r?\n/);
+      const firstLine = lines[0]; // أول سطر = التاريخ
       document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث:</b> ${firstLine}`;
-      lines.shift(); // حذف التاريخ
-      // نطلب من متصفح تحميل الخط قبل الرسم لضمان تناسق النصوص
-      if (document.fonts && document.fonts.ready) {
-        document.fonts.ready.then(()=> renderToCanvas(lines, firstLine)).catch(()=> renderToCanvas(lines, firstLine));
-      } else {
-        // fallback
-        setTimeout(()=> renderToCanvas(lines, firstLine), 300);
-      }
+      lines.shift(); // حذف التاريخ من المحتوى
+      let html = "";
+      let currentSection = "";
+      lines.forEach(line=>{
+        if(!line.trim()) return;
+        if(!line.match(/^0|^\$/)){ // عنوان قسم
+          if(currentSection){ html += `</ul></div>`; }
+          currentSection = line.trim();
+          html += `<div class="card"><h2>${currentSection}</h2><ul>`;
+        } else {
+          html += `<li>${line}</li>`;
+        }
+      });
+      if(currentSection) html += "</ul></div>";
+      document.getElementById("challenges").innerHTML = html;
     })
-    .catch(err=>{
-      console.error(err);
-      document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
-      // عرض رسالة تفصيلية في topbar
-      document.getElementById("topdate").innerText = "⚠️ فشل تحميل font-size.txt — تحقق من وجود الملف ومساره";
-    });
-
-  // منع السحب على الصفحة (touch) لزيادة الصعوبة على محاولة نسخ عبر اللمس
-  window.addEventListener('touchstart', function(e){ if (e.touches.length > 1) e.preventDefault(); }, {passive:false});
+    .catch(()=>{document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";});
   </script>
 </body>
 </html>
+
+
+
+
+
+
