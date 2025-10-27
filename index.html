@@ -1,136 +1,241 @@
 <!DOCTYPE html>
+
 <html lang="ar" dir="rtl">
+
 <head>
+
   <meta charset="UTF-8" />
+
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <title>🎯 تحديات Red Dead Online اليومية</title>
+
   <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;800&display=swap" rel="stylesheet">
+
   <style>
+
     :root{
+
       --bg:#0e0f12; --card:#15171b; --muted:#9aa3b2;
+
       --text:#e9edf3; --accent:#22d3ee; --line:#2a2f39;
+
     }
+
     *{box-sizing:border-box}
+
     body{
+
       margin:0;
+
       background:radial-gradient(1200px 800px at 80% -20%, #1b1f28 0%, #0e0f12 55%) fixed;
+
       color:var(--text);
+
       font-family:"Tajawal",sans-serif;
+
       line-height:1.7;
+
       padding:0 16px 80px;
-      user-select:none;
+
+      user-select:none;              /* منع تحديد النص */
+
       -webkit-user-select:none;
+
       -moz-user-select:none;
+
       -ms-user-select:none;
+
     }
+
     .wrap{max-width:980px;margin:auto;}
+
     .topbar{
+
       background:#15171b;border-bottom:1px solid var(--line);
+
       padding:12px 18px;text-align:center;font-weight:700;
+
       font-size:20px;color:var(--accent);
+
       box-shadow:0 4px 20px rgba(0,0,0,.3);
+
       position:sticky;top:0;z-index:1000;
+
     }
+
     header{
+
       background:linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.02));
+
       border:1px solid var(--line);
+
       border-radius:20px;
+
       padding:20px;margin-top:20px;margin-bottom:18px;
+
       box-shadow:0 8px 24px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.04);
+
       text-align:center;
+
     }
+
     h1{margin:0;font-weight:800;font-size:26px}
+
     .card{background:var(--card);border:1px solid var(--line);
+
       border-radius:18px;padding:16px;margin-top:14px}
+
     h2{margin-top:0;color:var(--accent);font-size:18px}
+
     ul{margin:0;padding:0;list-style:none}
+
     li{border-top:1px dashed var(--line);padding:8px 4px}
+
     li:first-child{border-top:none}
+
     footer{text-align:center;margin-top:24px;color:var(--muted);font-size:13px}
+
     .join-btn{
+
       display:inline-block;background:var(--accent);color:#000;text-decoration:none;
+
       font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
+
     }
-    .visitor-counter {
-      margin-top: 15px;
-      padding: 8px 16px;
-      background: var(--card);
-      border: 1px solid var(--line);
-      border-radius: 12px;
-      display: inline-block;
-    }
+
   </style>
+
 </head>
+
 <body>
+
   <div class="topbar" id="topdate">📅 جاري تحميل آخر تحديث...</div>
 
+
+
   <div class="wrap">
+
     <header>
-      <h1>🎯 التحديات اليومية 🎯</h1>
+
+      <h1>🎯 التحديات اليومية</h1>
+
     </header>
+
+
 
     <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
+
+
     <footer>
+
       <p><b>جميع الحقوق محفوظة لقروب RDD_TOP@ 'برمجة العسيري'</b></p>
+
       <a class="join-btn" href="https://t.me/RDD_TOP" target="_blank">🔗 انضم إلى القروب</a>
-      
-      <div class="visitor-counter">
-        <span>زوار الموقع: </span>
-        <span id="visitCount">0</span>
-      </div>
+
     </footer>
+
   </div>
 
+
+
   <script>
+
+  // تعطيل النقر بالزر الأيمن
+
   document.addEventListener('contextmenu', e => e.preventDefault());
+
+
+
+  // تعطيل النسخ والقص واللصق
+
   document.addEventListener('copy', e => e.preventDefault());
+
   document.addEventListener('cut', e => e.preventDefault());
+
   document.addEventListener('paste', e => e.preventDefault());
 
+
+
+  // تعطيل اختصارات الكيبورد (Ctrl+U, Ctrl+S, Ctrl+Shift+I, F12 ...)
+
   document.addEventListener('keydown', e => {
+
     if (
+
       e.key === 'F12' ||
+
       (e.ctrlKey && e.shiftKey && ['I','C','J'].includes(e.key.toUpperCase())) ||
+
       (e.ctrlKey && ['U','S','A','C','X'].includes(e.key.toUpperCase()))
+
     ) {
+
       e.preventDefault();
+
       alert('🚫 ممنوع عرض أو نسخ كود الصفحة.');
+
     }
+
   });
 
-  let count = localStorage.getItem('pageVisits');
-  if (!count) count = 0;
-  count = parseInt(count) + 1;
-  localStorage.setItem('pageVisits', count);
-  document.getElementById('visitCount').textContent = count;
+
+
+  // تحميل التحديات
 
   fetch("font-size.txt?" + Date.now())
-    .then(r=>r.text())
-    .then(text=>{
-      const lines = text.trim().split(/\r?\n/);
-      const firstLine = lines[0];
-      document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث:</b> ${firstLine}`;
-      lines.shift();
-      let html = "";
-      let currentSection = "";
-      lines.forEach(line=>{
-        if(!line.trim()) return;
-        if(!line.match(/^0|^\$/)){
-          if(currentSection){ html += `</ul></div>`; }
-          currentSection = line.trim();
-          html += `<div class="card"><h2>${currentSection}</h2><ul>`;
-        } else {
-          html += `<li>${line}</li>`;
-        }
-      });
-      if(currentSection) html += "</ul></div>";
-      document.getElementById("challenges").innerHTML = html;
-    })
-    .catch(()=>{
-      document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
-    });
-  </script>
-</body>
-</html>
 
+    .then(r=>r.text())
+
+    .then(text=>{
+
+      const lines = text.trim().split(/\r?\n/);
+
+      const firstLine = lines[0]; // أول سطر = التاريخ
+
+      document.getElementById("topdate").innerHTML = `📅 <b>تاريخ التحديث:</b> ${firstLine}`;
+
+      lines.shift(); // حذف التاريخ من المحتوى
+
+      let html = "";
+
+      let currentSection = "";
+
+      lines.forEach(line=>{
+
+        if(!line.trim()) return;
+
+        if(!line.match(/^0|^\$/)){ // عنوان قسم
+
+          if(currentSection){ html += `</ul></div>`; }
+
+          currentSection = line.trim();
+
+          html += `<div class="card"><h2>${currentSection}</h2><ul>`;
+
+        } else {
+
+          html += `<li>${line}</li>`;
+
+        }
+
+      });
+
+      if(currentSection) html += "</ul></div>";
+
+      document.getElementById("challenges").innerHTML = html;
+
+    })
+
+    .catch(()=>{
+
+      document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
+
+    });
+
+  </script>
+
+</body>
+
+</html>
