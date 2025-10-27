@@ -23,7 +23,7 @@
       color:var(--text);
       font-family:"Tajawal",sans-serif;
       line-height:1.7;
-      padding:0 16px 80px;
+      padding:0 16px 40px; /* تقليل الفراغ السفلي */
       user-select:none;
       -webkit-user-select:none;
       -moz-user-select:none;
@@ -57,10 +57,23 @@
       display:inline-block;background:var(--accent);color:#000;text-decoration:none;
       font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
     }
-    .ad-container {
-      display:block;
+
+    /* إعلان سفلي */
+    .bottom-ad {
+      background:#15171b;
+      border:1px solid #2a2f39;
+      border-radius:16px;
+      padding:18px;
+      margin:40px auto 0;
       text-align:center;
-      margin:20px 0;
+      max-width:728px;
+      box-shadow:0 3px 10px rgba(0,0,0,0.3);
+    }
+    .bottom-ad p {
+      color:#22d3ee;
+      font-weight:700;
+      margin-bottom:10px;
+      font-family:'Tajawal',sans-serif;
     }
   </style>
 </head>
@@ -73,19 +86,21 @@
       <h1>🎯 التحديات اليومية</h1>
     </header>
 
-    <!-- ✅ إعلان Google AdSense فوق التحديات -->
-    <div class="ad-container">
+    <div id="challenges">⏳ جاري تحميل التحديات...</div>
+
+    <!-- ✅ إعلان Google AdSense في أسفل الصفحة -->
+    <div class="bottom-ad">
+      <p>🔹 إعلان داعم للموقع 🔹</p>
       <ins class="adsbygoogle"
-           style="display:block"
-           data-ad-format="autorelaxed"
+           style="display:block;margin:auto"
            data-ad-client="ca-pub-6596385917043322"
-           data-ad-slot="3799740284"></ins>
+           data-ad-slot="3799740284"
+           data-ad-format="auto"
+           data-full-width-responsive="true"></ins>
       <script>
            (adsbygoogle = window.adsbygoogle || []).push({});
       </script>
     </div>
-
-    <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
     <footer>
       <p><b>جميع الحقوق محفوظة لقروب RDD_TOP@ 'برمجة العسيري'</b></p>
