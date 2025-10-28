@@ -57,33 +57,6 @@
       display:inline-block;background:var(--accent);color:#000;text-decoration:none;
       font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
     }
-
-    /* إعلان سفلي */
-    .bottom-ad {
-      background:#15171b;
-      border:1px solid #2a2f39;
-      border-radius:16px;
-      padding:18px;
-      margin:40px auto 0;
-      text-align:center;
-      max-width:728px;
-      box-shadow:0 3px 10px rgba(0,0,0,0.3);
-    }
-    .bottom-ad p {
-      color:#22d3ee;
-      font-weight:700;
-      margin-bottom:10px;
-      font-family:'Tajawal',sans-serif;
-    }
-    .loading-ad {
-      color:#9aa3b2;
-      font-size:14px;
-      animation: blink 1.5s infinite;
-    }
-    @keyframes blink {
-      0%, 100% { opacity: 0.6; }
-      50% { opacity: 1; }
-    }
   </style>
 </head>
 
@@ -97,9 +70,8 @@
 
     <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
-    <!-- ✅ إعلان Google AdSense في أسفل الصفحة -->
-    <div class="bottom-ad" id="ad-box">
-      <p>إعلان داعم للموقع · <span class="loading-ad">جاري تحميل الإعلان...</span></p>
+    <!-- ✅ إعلان Google AdSense (لن يظهر حتى يتم القبول) -->
+    <div class="bottom-ad" id="ad-box" style="display:none;">
       <ins class="adsbygoogle"
            style="display:block;margin:auto"
            data-ad-client="ca-pub-6596385917043322"
@@ -107,7 +79,8 @@
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script>
-           (adsbygoogle = window.adsbygoogle || []).push({});
+        // عندما تتم الموافقة من AdSense سيبدأ العرض تلقائياً
+        try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
       </script>
     </div>
 
