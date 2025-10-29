@@ -24,9 +24,6 @@
       line-height:1.7;
       padding:0 16px 60px;
       user-select:none;
-      -webkit-user-select:none;
-      -moz-user-select:none;
-      -ms-user-select:none;
     }
     .wrap{max-width:980px;margin:auto;}
     .topbar{
@@ -104,7 +101,7 @@
   </div>
 
   <script>
-  // منع النسخ والاطلاع على الكود
+  // منع النسخ وفتح الكود
   document.addEventListener('contextmenu', e => e.preventDefault());
   document.addEventListener('copy', e => e.preventDefault());
   document.addEventListener('cut', e => e.preventDefault());
@@ -147,23 +144,33 @@
       document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
     });
 
-  // ✅ تحميل موقع مدام نزار من ملف nazar.txt
-  fetch("nazar.txt?" + Date.now())
-    .then(r=>r.text())
-    .then(link=>{
-      document.getElementById("nazar").innerHTML = `
-        <h2>📍 موقع مدام نزار </h2>
-        <img src="${link.trim()}" alt="Madam Nazar Location">
-      `;
+  // ✅ 
+  const encoded = "aHR0cHM6Ly9tYWRhbS1uYXphci1sb2NhdGlvbi1hcGkuaGVyb2t1YXBwLmNvbS9sb2NhdGlvbi9jdXJyZW50";
+  const apiUrl = atob(encoded); // 
+
+  // ✅ 
+  fetch(apiUrl)
+    .then(res => res.json())
+    .then(data => {
+      const img = data?.data?.location?.image;
+      if (img) {
+        document.getElementById("nazar").innerHTML = `
+          <h2>📍 موقع مدام نزار </h2>
+          <img src="${img}" alt="Madam Nazar Location">
+        `;
+      } else {
+        document.getElementById("nazar").innerHTML = `
+          <h2>📍 موقع مدام نزار </h2>
+          <p>⚠️ لم يتم تحديث موقع نزار بعد، الرجاء التحقق لاحقًا.</p>
+        `;
+      }
     })
     .catch(()=>{
       document.getElementById("nazar").innerHTML = `
-        <h2>📍 موقع مدام نزار اليوم</h2>
-        <p>❌ تعذر تحميل الصورة.</p>
+        <h2>📍 موقع مدام نزار </h2>
+        <p>❌ تعذر الاتصال بالخادم لعرض الصورة حاليًا.</p>
       `;
     });
   </script>
 </body>
 </html>
-
-
