@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>🎯 تحديات Red Dead Online اليومية</title>
 
-  <!-- ✅ كود AdSense العام -->
   <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6596385917043322"
      crossorigin="anonymous"></script>
 
@@ -23,7 +22,7 @@
       color:var(--text);
       font-family:"Tajawal",sans-serif;
       line-height:1.7;
-      padding:0 16px 40px;
+      padding:0 16px 60px;
       user-select:none;
       -webkit-user-select:none;
       -moz-user-select:none;
@@ -57,6 +56,15 @@
       display:inline-block;background:var(--accent);color:#000;text-decoration:none;
       font-weight:700;padding:10px 20px;border-radius:12px;margin-top:10px;
     }
+    .nazar-card{
+      background:var(--card);border:1px solid var(--line);
+      border-radius:18px;padding:16px;margin-top:25px;text-align:center;
+    }
+    .nazar-card img{
+      width:100%;max-width:480px;border-radius:12px;
+      border:1px solid var(--line);margin-top:10px;
+      box-shadow:0 4px 15px rgba(0,0,0,.4);
+    }
   </style>
 </head>
 
@@ -70,7 +78,13 @@
 
     <div id="challenges">⏳ جاري تحميل التحديات...</div>
 
-    <!-- ✅ إعلان Google AdSense (لن يظهر حتى يتم القبول) -->
+    <!-- ✅ موقع مدام نزار -->
+    <div class="nazar-card" id="nazar">
+      <h2>📍 موقع مدام نزار اليوم</h2>
+      <p>⏳ جاري تحميل الصورة...</p>
+    </div>
+
+    <!-- ✅ إعلان Google AdSense -->
     <div class="bottom-ad" id="ad-box" style="display:none;">
       <ins class="adsbygoogle"
            style="display:block;margin:auto"
@@ -79,7 +93,6 @@
            data-ad-format="auto"
            data-full-width-responsive="true"></ins>
       <script>
-        // عندما تتم الموافقة من AdSense سيبدأ العرض تلقائياً
         try { (adsbygoogle = window.adsbygoogle || []).push({}); } catch(e){}
       </script>
     </div>
@@ -91,15 +104,11 @@
   </div>
 
   <script>
-  // تعطيل النقر بالزر الأيمن
+  // منع النسخ والاطلاع على الكود
   document.addEventListener('contextmenu', e => e.preventDefault());
-
-  // تعطيل النسخ والقص واللصق
   document.addEventListener('copy', e => e.preventDefault());
   document.addEventListener('cut', e => e.preventDefault());
   document.addEventListener('paste', e => e.preventDefault());
-
-  // تعطيل اختصارات الكيبورد
   document.addEventListener('keydown', e => {
     if (
       e.key === 'F12' ||
@@ -136,6 +145,22 @@
     })
     .catch(()=>{
       document.getElementById("challenges").innerHTML="❌ حدث خطأ أثناء تحميل التحديات.";
+    });
+
+  // ✅ تحميل موقع مدام نزار من ملف nazar.txt
+  fetch("nazar.txt?" + Date.now())
+    .then(r=>r.text())
+    .then(link=>{
+      document.getElementById("nazar").innerHTML = `
+        <h2>📍 موقع مدام نزار اليوم</h2>
+        <img src="${link.trim()}" alt="Madam Nazar Location">
+      `;
+    })
+    .catch(()=>{
+      document.getElementById("nazar").innerHTML = `
+        <h2>📍 موقع مدام نزار اليوم</h2>
+        <p>❌ تعذر تحميل الصورة.</p>
+      `;
     });
   </script>
 </body>
